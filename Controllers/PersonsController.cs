@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using test_swagger_api.Data;
 using test_swagger_api.Models;
 
 namespace test_swagger_api.Controllers
@@ -7,13 +8,16 @@ namespace test_swagger_api.Controllers
     [Route("[controller]")]
     public class PersonsController : ControllerBase
     {
-
-        public PersonsController() { }
+        private readonly AppDbContext Context;
+        public PersonsController(AppDbContext context) {
+            Context = context;
+        }
 
         [HttpGet("{id}")]
-        public Person Get()
+        public async Task<Person> Get(int id)
         {
-            return new Person(id: 1, name: "John", age: 30);
+            var person = await Context.Person.FindAsync(id);
+            return person ?? throw new Exception(message: "Not found");
         }
     }
 }

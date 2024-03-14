@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using test_swagger_api.Data;
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
 
 // Add services to the container.
 
